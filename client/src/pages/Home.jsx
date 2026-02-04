@@ -1,7 +1,4 @@
-// src/pages/Home.jsx
-
 import LenisScroll from "../components/lenis-scroll";
-
 // Sections
 import HeroSection from "../sections/hero-section";
 import HowItWorksSection from "../sections/how-it-works-section";

@@ -63,7 +63,7 @@ export default function Navbar() {
         {/* LOGO */}
         <Link to="/" className="flex items-center gap-2 font-bold text-lg">
           <LibraryIcon className="size-6 text-indigo-600" />
-          LibraryMS
+          Turtle Library
         </Link>
 
         {/* LINKS */}

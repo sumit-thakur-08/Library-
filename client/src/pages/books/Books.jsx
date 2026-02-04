@@ -6,7 +6,8 @@ const booksData = [
     id: 1,
     title: "Start With Why",
     author: "Simon Sinek",
-    cover: "https://images-na.ssl-images-amazon.com/images/I/71g0n4kzUOL.jpg",
+    cover:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfN0Qgk_0H_WIzWxJ0gSp2vJNZqgW031W6nA&s",
     status: "Available",
   },
   {
@@ -21,6 +22,112 @@ const booksData = [
     title: "JavaScript: The Good Parts",
     author: "Douglas Crockford",
     cover: "https://images-na.ssl-images-amazon.com/images/I/81kqrwS1nNL.jpg",
+    status: "Available",
+  },
+
+  {
+    id: 4,
+    title: "JavaScript: The Good Parts",
+    author: "Douglas Crockford",
+    cover:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoTcL9hnwF5FHeAut_UNol3M7d-WD1P-sXfA&s",
+    status: "Available",
+  },
+  {
+    id: 1,
+    title: "Start With Why",
+    author: "Simon Sinek",
+    cover:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfN0Qgk_0H_WIzWxJ0gSp2vJNZqgW031W6nA&s",
+    status: "Available",
+  },
+  {
+    id: 2,
+    title: "The Hobbit",
+    author: "J.R.R. Tolkien",
+    cover:
+      "https://m.media-amazon.com/images/I/610J0377U4L._AC_UF1000,1000_QL80_.jpg",
+    status: "Issued",
+  },
+  {
+    id: 3,
+    title: "JavaScript: The Good Parts",
+    author: "Douglas Crockford",
+    cover:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9l26qBnO7zCdei7KJZ9ysuYBIaxlLBT4ppQ&s",
+    status: "Available",
+  },
+
+  {
+    id: 4,
+    title: "JavaScript: The Good Parts",
+    author: "Douglas Crockford",
+    cover:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7dQXaXfV7KAUNAqRdnhJvjFYCjaME3CQTBg&s",
+    status: "Available",
+  },
+  {
+    id: 1,
+    title: "Start With Why",
+    author: "Simon Sinek",
+    cover:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfN0Qgk_0H_WIzWxJ0gSp2vJNZqgW031W6nA&s",
+    status: "Available",
+  },
+  {
+    id: 2,
+    title: "The Hobbit",
+    author: "J.R.R. Tolkien",
+    cover: "https://images-na.ssl-images-amazon.com/images/I/81t2CVWEsUL.jpg",
+    status: "Issued",
+  },
+  {
+    id: 3,
+    title: "JavaScript: The Good Parts",
+    author: "Douglas Crockford",
+    cover: "https://images-na.ssl-images-amazon.com/images/I/81kqrwS1nNL.jpg",
+    status: "Available",
+  },
+
+  {
+    id: 4,
+    title: "JavaScript: The Good Parts",
+    author: "Douglas Crockford",
+    cover:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoTcL9hnwF5FHeAut_UNol3M7d-WD1P-sXfA&s",
+    status: "Available",
+  },
+  {
+    id: 1,
+    title: "Start With Why",
+    author: "Simon Sinek",
+    cover:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfN0Qgk_0H_WIzWxJ0gSp2vJNZqgW031W6nA&s",
+    status: "Available",
+  },
+  {
+    id: 2,
+    title: "The Hobbit",
+    author: "J.R.R. Tolkien",
+    cover:
+      "https://m.media-amazon.com/images/I/610J0377U4L._AC_UF1000,1000_QL80_.jpg",
+    status: "Issued",
+  },
+  {
+    id: 3,
+    title: "JavaScript: The Good Parts",
+    author: "Douglas Crockford",
+    cover:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9l26qBnO7zCdei7KJZ9ysuYBIaxlLBT4ppQ&s",
+    status: "Available",
+  },
+
+  {
+    id: 4,
+    title: "JavaScript: The Good Parts",
+    author: "Douglas Crockford",
+    cover:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7dQXaXfV7KAUNAqRdnhJvjFYCjaME3CQTBg&s",
     status: "Available",
   },
 ];
