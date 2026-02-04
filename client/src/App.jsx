@@ -8,6 +8,7 @@ import AuthLayout from "./layout/AuthLayout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Faculty from "./pages/Faculty";
+import Register from "./pages/Register";
 // import Dashboard from "./pages/Dashboard"; // demo
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
         {/* 🔐 AUTH ROUTES */}
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Route>
 
         {/* 👤 USER DASHBOARD (future protected) */}
