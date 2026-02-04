@@ -29,7 +29,7 @@ export default function Login() {
   // ✅ login success → dashboard
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/dashboard");
+      navigate("/books");
     }
   }, [isAuthenticated, navigate]);
 
