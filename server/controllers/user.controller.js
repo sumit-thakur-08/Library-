@@ -79,20 +79,18 @@ const registerUser = asyncHandler(async (req, res) => {
 
 // Login user
 const loginUser = asyncHandler(async (req, res) => {
-  const { nameEmail, password } = req.body;
+  const { email, password } = req.body;
 
-  if (!nameEmail && !password) {
-    throw new ApiError(400, "username/email or password is required!");
+  if (!email || !password) {
+    throw new ApiError(400, "username/email and password are required!");
   }
 
-  // Determine if the input is email or username
-  const isEmail = nameEmail.includes("@");
+  const isEmail = typeof email === "string" && email.includes("@");
 
-  // Find user based on email or username
   const user = await User.findOne({
     $or: [
-      { username: isEmail ? null : nameEmail },
-      { email: isEmail ? nameEmail : null },
+      { username: isEmail ? undefined : email },
+      { email: isEmail ? email : undefined },
     ],
   });
 
@@ -113,16 +111,17 @@ const loginUser = asyncHandler(async (req, res) => {
   const loggedInUser = await User.findById(user._id).select(
     "-password -refreshToken",
   );
+  console.log(loggedInUser);
 
-  const option = {
+  const options = {
     httpOnly: true,
     secure: true,
   };
 
   return res
     .status(200)
-    .cookie("accessToken", accessToken, option)
-    .cookie("refreshToken", refreshToken, option)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
     .json(
       new ApiResponse(
         200,
@@ -131,7 +130,7 @@ const loginUser = asyncHandler(async (req, res) => {
           accessToken,
           refreshToken,
         },
-        "User loggen In successfully",
+        "User logged in successfully",
       ),
     );
 });

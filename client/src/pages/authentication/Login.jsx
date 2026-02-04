@@ -1,8 +1,15 @@
 import { useNavigate, Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../../store/slices/authServices";
 
 export default function Login() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { loading, error, isAuthenticated } = useSelector(
+    (state) => state.auth,
+  );
 
   const [formData, setFormData] = useState({
     email: "",
@@ -15,18 +22,21 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // 🔐 DEMO LOGIN (future: API call)
+    dispatch(loginUser(formData));
     console.log(formData);
-
-    // redirect to demo dashboard
-    navigate("/dashboard");
   };
+
+  // ✅ login success → dashboard
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <div className="bg-white text-gray-500 max-w-96 w-full mx-4 p-4 md:p-6 text-sm rounded-xl shadow-[0px_0px_10px_0px] shadow-black/10">
       <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">
-        Welcome back
+        Welcome back 👋
       </h2>
 
       <form onSubmit={handleSubmit}>
@@ -50,6 +60,11 @@ export default function Login() {
           className="w-full bg-transparent border mt-1 border-gray-500/30 outline-none rounded-full py-2.5 px-4"
         />
 
+        {/* ❌ Error */}
+        {error && (
+          <p className="text-red-500 text-xs mt-2 text-center">{error}</p>
+        )}
+
         <div className="text-right py-4">
           <Link to="/forgot-password" className="text-blue-600 underline">
             Forgot Password?
@@ -58,9 +73,10 @@ export default function Login() {
 
         <button
           type="submit"
-          className="w-full mb-3 bg-indigo-500 py-2.5 rounded-full text-white hover:opacity-90 transition"
+          disabled={loading}
+          className="w-full mb-3 bg-indigo-500 py-2.5 rounded-full text-white hover:opacity-90 transition disabled:opacity-60"
         >
-          Log in
+          {loading ? "Logging in..." : "Log in"}
         </button>
       </form>
 

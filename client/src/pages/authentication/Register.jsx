@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { registerUserApi } from "../../services/authService";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -13,24 +14,39 @@ export default function Register() {
     confirmPassword: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
+    // ✅ frontend validation
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match");
+      setError("Passwords do not match");
       return;
     }
 
-    console.log("Register Data 👉", formData);
+    // ❌ confirmPassword backend ko nahi bhejna
+    const { confirmPassword, ...payload } = formData;
 
-    // 🔐 FUTURE: API call here
-    // axios.post("/api/auth/register", formData)
+    try {
+      setLoading(true);
 
-    navigate("/login"); // demo redirect
+      const res = await registerUserApi(payload);
+      console.log("Register Success 👉", res.data);
+
+      navigate("/login");
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -40,7 +56,6 @@ export default function Register() {
       </h2>
 
       <form onSubmit={handleSubmit}>
-        {/* NAME */}
         <input
           name="name"
           value={formData.name}
@@ -51,7 +66,6 @@ export default function Register() {
           required
         />
 
-        {/* USERNAME */}
         <input
           name="username"
           value={formData.username}
@@ -62,7 +76,6 @@ export default function Register() {
           required
         />
 
-        {/* EMAIL */}
         <input
           name="email"
           value={formData.email}
@@ -73,7 +86,6 @@ export default function Register() {
           required
         />
 
-        {/* PHONE */}
         <input
           name="phone"
           value={formData.phone}
@@ -84,7 +96,6 @@ export default function Register() {
           required
         />
 
-        {/* PASSWORD */}
         <input
           name="password"
           value={formData.password}
@@ -95,7 +106,6 @@ export default function Register() {
           required
         />
 
-        {/* CONFIRM PASSWORD */}
         <input
           name="confirmPassword"
           value={formData.confirmPassword}
@@ -106,11 +116,14 @@ export default function Register() {
           required
         />
 
+        {error && <p className="text-red-500 text-center mb-2">{error}</p>}
+
         <button
           type="submit"
-          className="w-full mt-2 bg-indigo-600 py-2.5 rounded-full text-white font-medium hover:opacity-90"
+          disabled={loading}
+          className="w-full mt-2 bg-indigo-600 py-2.5 rounded-full text-white font-medium hover:opacity-90 disabled:opacity-60"
         >
-          Create Account
+          {loading ? "Creating account..." : "Create Account"}
         </button>
       </form>
 
