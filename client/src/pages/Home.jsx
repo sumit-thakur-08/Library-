@@ -1,6 +1,6 @@
+// src/pages/Home.jsx
+
 import LenisScroll from "../components/lenis-scroll";
-import Banner from "../components/banner";
-import Layout from "../layout/Layout";
 
 // Sections
 import HeroSection from "../sections/hero-section";
@@ -14,17 +14,14 @@ import CallToActionSection from "../sections/call-to-action-section";
 export default function Home() {
   return (
     <>
-      <Banner />
-      <Layout>
-        <LenisScroll />
-        <HeroSection />
-        <HowItWorksSection />
-        <MeetOurTeamSection />
-        <OurTestimonialsSection />
-        <OurPricingSection />
-        <FaqSection />
-        <CallToActionSection />
-      </Layout>
+      <LenisScroll />
+      <HeroSection />
+      <HowItWorksSection />
+      <MeetOurTeamSection />
+      <OurTestimonialsSection />
+      <OurPricingSection />
+      <FaqSection />
+      <CallToActionSection />
     </>
   );
 }
