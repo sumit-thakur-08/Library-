@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+import { Book } from "../models/book.model.js";
 import { Category } from "../models/category.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
@@ -60,12 +62,31 @@ export const getCategoryById = async (req, res) => {
 export const updateCategory = async (req, res) => {
   const { categoryId } = req.params;
   const { name, description } = req.body;
+  console.log(req.body);
+
+  // ✅ ObjectId check
+  if (!mongoose.Types.ObjectId.isValid(categoryId)) {
+    throw new ApiError(400, "Invalid category ID");
+  }
+
+  // ✅ Duplicate name check
+  if (name) {
+    const existingCategory = await Category.findOne({
+      name,
+      _id: { $ne: categoryId },
+    });
+
+    if (existingCategory) {
+      throw new ApiError(409, "Category already exists");
+    }
+  }
 
   const category = await Category.findByIdAndUpdate(
     categoryId,
     { name, description },
     { new: true },
   );
+  console.log(category);
 
   if (!category) {
     throw new ApiError(404, "Category not found");
@@ -81,6 +102,21 @@ export const updateCategory = async (req, res) => {
  */
 export const deleteCategory = async (req, res) => {
   const { categoryId } = req.params;
+
+  // ✅ ObjectId check
+  if (!mongoose.Types.ObjectId.isValid(categoryId)) {
+    throw new ApiError(400, "Invalid category ID");
+  }
+
+  // ❗ Books linked check
+  const booksCount = await Book.countDocuments({ categoryId });
+
+  if (booksCount > 0) {
+    throw new ApiError(
+      400,
+      "Cannot delete category. Books are linked to this category",
+    );
+  }
 
   const category = await Category.findByIdAndDelete(categoryId);
   if (!category) {
