@@ -6,5 +6,7 @@ export const registerUserApi = (data) => {
 
 // 🔐 LOGIN API
 export const loginUserApi = (data) => {
-  return axiosInstance.post("/auth/login", data);
+  return axiosInstance.post("/auth/login", data, {
+    withCredentials: true,
+  });
 };

@@ -85,12 +85,12 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "username/email and password are required!");
   }
 
-  const isEmail = typeof email === "string" && email.includes("@");
+  const isEmail = email.includes("@");
 
   const user = await User.findOne({
     $or: [
-      { username: isEmail ? undefined : email },
       { email: isEmail ? email : undefined },
+      { username: !isEmail ? email : undefined },
     ],
   });
 
@@ -99,9 +99,8 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 
   const isPasswordValid = await user.isPasswordCorrect(password);
-
   if (!isPasswordValid) {
-    throw new ApiError(401, "Password Incorrect");
+    throw new ApiError(401, "Invalid password");
   }
 
   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
@@ -111,28 +110,18 @@ const loginUser = asyncHandler(async (req, res) => {
   const loggedInUser = await User.findById(user._id).select(
     "-password -refreshToken",
   );
-  console.log(loggedInUser);
 
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
-
-  return res
-    .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
-    .json(
-      new ApiResponse(
-        200,
-        {
-          user: loggedInUser,
-          accessToken,
-          refreshToken,
-        },
-        "User logged in successfully",
-      ),
-    );
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      {
+        user: loggedInUser,
+        accessToken,
+        refreshToken,
+      },
+      "Login successful",
+    ),
+  );
 });
 
 // logout user

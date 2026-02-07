@@ -2,12 +2,14 @@ import { useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../store/slices/authServices";
+import { FcGoogle } from "react-icons/fc";
+import { FaApple } from "react-icons/fa";
 
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading, error, isAuthenticated } = useSelector(
+  const { loading, error, isAuthenticated, role } = useSelector(
     (state) => state.auth,
   );
 
@@ -23,94 +25,89 @@ export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(loginUser(formData));
-    console.log(formData);
   };
 
-  // ✅ login success → dashboard
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/books");
+    if (isAuthenticated && role) {
+      role.toLowerCase() === "admin"
+        ? navigate("/admin/dashboard")
+        : navigate("/books");
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, role, navigate]);
 
   return (
-    <div className="bg-white text-gray-500 max-w-96 w-full mx-4 p-4 md:p-6 text-sm rounded-xl shadow-[0px_0px_10px_0px] shadow-black/10">
-      <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">
-        Welcome back 👋
-      </h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-lg p-8">
+        <h2 className="text-3xl font-semibold text-center mb-8">
+          Welcome back 👋
+        </h2>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          name="email"
-          type="email"
-          required
-          placeholder="Enter your email"
-          value={formData.email}
-          onChange={handleChange}
-          className="w-full bg-transparent border my-3 border-gray-500/30 outline-none rounded-full py-2.5 px-4"
-        />
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            name="email"
+            placeholder="Email or Username"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full rounded-full border px-5 py-3 focus:ring-2 focus:ring-indigo-400"
+            required
+          />
 
-        <input
-          name="password"
-          type="password"
-          required
-          placeholder="Enter your password"
-          value={formData.password}
-          onChange={handleChange}
-          className="w-full bg-transparent border mt-1 border-gray-500/30 outline-none rounded-full py-2.5 px-4"
-        />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            className="w-full rounded-full border px-5 py-3 focus:ring-2 focus:ring-indigo-400"
+            required
+          />
 
-        {/* ❌ Error */}
-        {error && (
-          <p className="text-red-500 text-xs mt-2 text-center">{error}</p>
-        )}
+          <div className="text-right">
+            <Link
+              to="/forgot-password"
+              className="text-sm text-indigo-600 hover:underline"
+            >
+              Forgot Password?
+            </Link>
+          </div>
 
-        <div className="text-right py-4">
-          <Link to="/forgot-password" className="text-blue-600 underline">
-            Forgot Password?
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-2 rounded-lg text-center">
+              {error}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-3 rounded-full font-medium disabled:opacity-60"
+          >
+            {loading ? "Logging in..." : "Log in"}
+          </button>
+        </form>
+
+        <p className="text-center text-sm text-gray-600 mt-6">
+          Don’t have an account?{" "}
+          <Link to="/register" className="text-indigo-600 hover:underline">
+            Signup
           </Link>
+        </p>
+
+        <div className="my-6 flex items-center gap-3">
+          <div className="flex-1 h-px bg-gray-300" />
+          <span className="text-sm text-gray-400">or</span>
+          <div className="flex-1 h-px bg-gray-300" />
         </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full mb-3 bg-indigo-500 py-2.5 rounded-full text-white hover:opacity-90 transition disabled:opacity-60"
-        >
-          {loading ? "Logging in..." : "Log in"}
+        <button className="w-full flex items-center justify-center gap-3 bg-black text-white py-3 rounded-full mb-3">
+          <FaApple size={18} /> Log in with Apple
         </button>
-      </form>
 
-      <p className="text-center mt-4">
-        Don’t have an account?{" "}
-        <Link to="/register" className="text-blue-500 underline">
-          Signup
-        </Link>
-      </p>
-
-      {/* SOCIAL LOGIN (UI ONLY) */}
-      <button
-        type="button"
-        className="w-full flex items-center gap-2 justify-center mt-5 bg-black py-2.5 rounded-full text-white"
-      >
-        <img
-          className="h-4 w-4"
-          src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/login/appleLogo.png"
-          alt="Apple"
-        />
-        Log in with Apple
-      </button>
-
-      <button
-        type="button"
-        className="w-full flex items-center gap-2 justify-center my-3 bg-white border border-gray-500/30 py-2.5 rounded-full text-gray-800"
-      >
-        <img
-          className="h-4 w-4"
-          src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/login/googleFavicon.png"
-          alt="Google"
-        />
-        Log in with Google
-      </button>
+        <button className="w-full flex items-center justify-center gap-3 border py-3 rounded-full">
+          <FcGoogle size={20} /> Log in with Google
+        </button>
+      </div>
     </div>
   );
 }

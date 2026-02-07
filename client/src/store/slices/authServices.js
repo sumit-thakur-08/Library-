@@ -19,12 +19,24 @@ export const registerUser = createAsyncThunk(
 // Login
 export const loginUser = createAsyncThunk(
   "auth/login",
-  async (formData, { rejectWithValue }) => {
+  async (data, thunkAPI) => {
     try {
-      const response = await loginUserApi(formData);
-      return response.data;
+      const res = await loginUserApi(data);
+
+      // 🔥 BACKEND RESPONSE STRUCTURE MATCH
+      const { accessToken, user } = res.data.data;
+
+      localStorage.setItem("token", accessToken);
+      localStorage.setItem("role", user.role);
+
+      return {
+        token: accessToken,
+        user,
+      };
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || "Login failed");
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Login failed",
+      );
     }
   },
 );
