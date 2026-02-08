@@ -31,7 +31,7 @@ export default function Login() {
     if (isAuthenticated && role) {
       role.toLowerCase() === "admin"
         ? navigate("/admin/dashboard")
-        : navigate("/books");
+        : navigate("/user/dashboard");
     }
   }, [isAuthenticated, role, navigate]);
 

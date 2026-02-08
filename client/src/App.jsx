@@ -10,6 +10,8 @@ import Register from "./pages/authentication/Register";
 import Books from "./pages/books/Books";
 import AdminLayout from "./layout/admin/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
+import UserDashboard from "./pages/users/UserDashboard";
+import UserLayout from "./layout/admin/UserLayout";
 // import Dashboard from "./pages/Dashboard"; // demo
 
 export default function App() {
@@ -30,11 +32,17 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/faculty" element={<Faculty />} />
         </Route>
+
         <Route path="/books" element={<Books />} />
 
         {/* ADMIN ROUTES */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
+        </Route>
+
+        {/* User */}
+        <Route path="/user" element={<UserLayout />}>
+          <Route path="dashboard" element={<UserDashboard />} />
         </Route>
       </Routes>
     </Router>

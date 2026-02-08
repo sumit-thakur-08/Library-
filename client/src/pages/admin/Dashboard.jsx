@@ -8,7 +8,7 @@ export default function Dashboard() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-indigo-700">
-          Welcome Back, Amit Singh!
+          Welcome Back, Khushi kumari!
         </h1>
         <p className="text-gray-500">
           Here’s an overview of the Turtle Library's current status and
