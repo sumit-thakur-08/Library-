@@ -10,3 +10,13 @@ export const loginUserApi = (data) => {
     withCredentials: true,
   });
 };
+
+export const logoutUserApi = (data) => {
+  return axiosInstance.post(
+    "/auth/logout",
+    {},
+    {
+      withCredentials: true,
+    },
+  );
+};

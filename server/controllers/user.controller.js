@@ -126,22 +126,16 @@ const loginUser = asyncHandler(async (req, res) => {
 
 // logout user
 const logoutUser = asyncHandler(async (req, res) => {
-  const userId = req.user._id;
-
   try {
-    // Remove the refreshToken from the user document
-    await User.findByIdAndUpdate(
-      userId,
-      { $unset: { refreshToken: 1 } }, // this remove the refreshToken feild
-      { new: true },
-    );
+    if (req.user?._id) {
+      // Remove refresh token from DB only if user is logged in
+      await User.findByIdAndUpdate(req.user._id, {
+        $unset: { refreshToken: 1 },
+      });
+    }
 
-    // set cookie options
-    const cookieOptions = {
-      httpOnly: true,
-      sameSite: "Strict",
-    };
-    // delete the cookies
+    // clear cookies anyway
+    const cookieOptions = { httpOnly: true, sameSite: "Strict" };
     res.clearCookie("accessToken", cookieOptions);
     res.clearCookie("refreshToken", cookieOptions);
 
@@ -149,7 +143,7 @@ const logoutUser = asyncHandler(async (req, res) => {
       .status(200)
       .json(new ApiResponse(200, {}, "User logged out successfully"));
   } catch (error) {
-    console.log("Something went wrong whlile logout user::", error);
+    console.log("Logout error:", error);
     throw new ApiError(400, "User logout failed");
   }
 });

@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   BookOpen,
@@ -7,8 +7,23 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../../store/slices/authServices";
 
 export default function Sidebar() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUser()).unwrap();
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+      console.log("ERROR FAILED");
+      alert("Logout Failed , Something went wrong");
+    }
+  };
   return (
     <aside className="w-64 bg-gradient-to-b from-indigo-700 to-indigo-600 text-white flex flex-col">
       <div className="px-6 py-5 text-xl font-bold flex items-center gap-2">
@@ -16,7 +31,7 @@ export default function Sidebar() {
       </div>
 
       <nav className="flex-1 px-4 space-y-1">
-        <NavLink to="/admin" end className="admin-nav">
+        <NavLink to="/admin/dashboard" end className="admin-nav">
           <LayoutDashboard size={18} /> Dashboard
         </NavLink>
         <NavLink to="/admin/books" className="admin-nav">
@@ -33,7 +48,10 @@ export default function Sidebar() {
         </NavLink>
       </nav>
 
-      <button className="flex items-center gap-2 px-6 py-4 hover:bg-indigo-500">
+      <button
+        className="flex items-center gap-2 px-6 py-4 hover:bg-indigo-500"
+        onClick={handleLogout}
+      >
         <LogOut size={18} /> Logout
       </button>
     </aside>

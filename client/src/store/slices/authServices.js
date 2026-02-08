@@ -1,5 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { registerUserApi, loginUserApi } from "../../services/authService";
+import {
+  registerUserApi,
+  loginUserApi,
+  logoutUserApi,
+} from "../../services/authService";
 
 // registration
 export const registerUser = createAsyncThunk(
@@ -36,6 +40,24 @@ export const loginUser = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || "Login failed",
+      );
+    }
+  },
+);
+
+// Logout
+export const logoutUser = createAsyncThunk(
+  "auth/logout",
+  async (_, thunkAPI) => {
+    try {
+      await logoutUserApi();
+      // clear local storage
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      return true;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Logout Failed",
       );
     }
   },
