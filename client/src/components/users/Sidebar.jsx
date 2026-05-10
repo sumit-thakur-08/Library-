@@ -52,6 +52,12 @@ export default function Sidebar() {
         >
           <User size={18} /> Profile
         </NavLink>
+        <NavLink
+          to="/login"
+          className="user-nav hover:bg-indigo-500 rounded-md flex items-center gap-2 px-3 py-2"
+        >
+          <MessageCircle size={18} /> Logout
+        </NavLink>
       </nav>
 
       {/* Optional Footer / Info */}
