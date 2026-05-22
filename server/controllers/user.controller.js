@@ -4,6 +4,12 @@ import { User } from "../models/user.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 
+const cookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "Strict",
+};
+
 //refresh and genrate acccess token
 const generateAccessAndRefreshToken = async (userId) => {
   try {
@@ -59,10 +65,9 @@ const registerUser = asyncHandler(async (req, res) => {
     password,
     username,
   });
-  console.log(user);
-
-  const token = await generateAccessAndRefreshToken(user._id);
-  user.save(); // save user
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+    user._id,
+  );
 
   const createdUser = await User.findById(user._id).select(
     "-password -refreshToken",
@@ -74,7 +79,15 @@ const registerUser = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, createdUser, "user registered successfully "));
+    .cookie("accessToken", accessToken, cookieOptions)
+    .cookie("refreshToken", refreshToken, cookieOptions)
+    .json(
+      new ApiResponse(
+        200,
+        { user: createdUser, accessToken, refreshToken },
+        "user registered successfully ",
+      ),
+    );
 });
 
 // Login user
@@ -111,17 +124,21 @@ const loginUser = asyncHandler(async (req, res) => {
     "-password -refreshToken",
   );
 
-  return res.status(200).json(
-    new ApiResponse(
-      200,
-      {
-        user: loggedInUser,
-        accessToken,
-        refreshToken,
-      },
-      "Login successful",
-    ),
-  );
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, cookieOptions)
+    .cookie("refreshToken", refreshToken, cookieOptions)
+    .json(
+      new ApiResponse(
+        200,
+        {
+          user: loggedInUser,
+          accessToken,
+          refreshToken,
+        },
+        "Login successful",
+      ),
+    );
 });
 
 // logout user
@@ -135,7 +152,6 @@ const logoutUser = asyncHandler(async (req, res) => {
     }
 
     // clear cookies anyway
-    const cookieOptions = { httpOnly: true, sameSite: "Strict" };
     res.clearCookie("accessToken", cookieOptions);
     res.clearCookie("refreshToken", cookieOptions);
 
@@ -173,30 +189,26 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       throw new ApiError(401, "Refresh token is expired or used");
     }
 
-    const option = {
-      httpOnly: true,
-      secure: true,
-    };
-
-    const { accessToken, newRefreshToken } =
-      await generateAccessAndRefreshToken(user._id);
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+      user._id,
+    );
 
     return res
       .status(200)
-      .cookie("accessToken", accessToken, option)
-      .cookie("refreshToken", newRefreshToken, option)
+      .cookie("accessToken", accessToken, cookieOptions)
+      .cookie("refreshToken", refreshToken, cookieOptions)
       .json(
         new ApiResponse(
           200,
           {
             accessToken,
-            refreshToken: newRefreshToken,
+            refreshToken,
           },
           "Access Token Refreshed",
         ),
       );
   } catch (error) {
-    throw new ApiError(401, error?.message || "Inavalid refresh token");
+    throw new ApiError(401, error?.message || "Invalid refresh token");
   }
 });
 
@@ -216,7 +228,7 @@ const changeCurrentUserPassword = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiError(200, {}, "Password change successfully!!!"));
+    .json(new ApiResponse(200, {}, "Password changed successfully!!!"));
 });
 
 export {
