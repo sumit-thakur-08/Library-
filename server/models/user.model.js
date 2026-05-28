@@ -96,7 +96,24 @@ const userSchema = new Schema(
     last_login: {
       type: Date,
     },
+    // ================= LIBRARY =================
 
+    library_id: {
+      type: String,
+      unique: true,
+      trim: true,
+    },
+
+    address: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
+    total_fine: {
+      type: Number,
+      default: 0,
+    },
     // ================= PASSWORD RESET =================
 
     forgot_password_token: {

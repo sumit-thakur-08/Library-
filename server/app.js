@@ -16,11 +16,11 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
-import userRouter from "./routes/user.routes.js";
+import authRouter from "./routes/auth.routes.js";
 import bookRoute from "./routes/book.routes.js";
 import categoryRoute from "./routes/category.routes.js";
 
-app.use("/api/auth", userRouter);
+app.use("/api/auth", authRouter);
 app.use("/api/v1/books", bookRoute);
 app.use("/api/v1/category", categoryRoute);
 

@@ -51,6 +51,23 @@ const bookSchema = new mongoose.Schema(
     coverImageUrl: {
       type: String,
     },
+    status: {
+      type: String,
+      enum: ["AVAILABLE", "OUT_OF_STOCK"],
+      default: "AVAILABLE",
+    },
+    language: {
+      type: String,
+      default: "English",
+    },
+    shelfLocation: {
+      type: String,
+      trim: true,
+    },
+    addedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true },
 );
